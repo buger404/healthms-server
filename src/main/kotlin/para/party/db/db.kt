@@ -16,5 +16,5 @@ val dataSource by lazy {
 }
 
 val db by lazy {
-    Database.connect(dataSource)
+    Database.connect(dataSource, dialect = SinodbDialect())
 }
