@@ -1,4 +1,4 @@
-package para.party.plugins
+package party.para.plugins
 
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
@@ -9,7 +9,7 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.util.pipeline.*
 import org.slf4j.LoggerFactory
-import para.party.handler.*
+import party.para.handler.*
 import java.util.*
 
 fun Application.registerRoute() {

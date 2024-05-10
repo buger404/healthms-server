@@ -1,11 +1,11 @@
-package para.party
+package party.para
 
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.server.testing.*
 import kotlin.test.*
-import para.party.plugins.*
+import party.para.plugins.*
 
 class ApplicationTest {
     @Test

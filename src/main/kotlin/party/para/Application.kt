@@ -1,10 +1,10 @@
-package para.party
+package party.para
 
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
-import para.party.plugins.registerMiddleware
-import para.party.plugins.registerRoute
+import party.para.plugins.registerMiddleware
+import party.para.plugins.registerRoute
 
 fun main() {
     embeddedServer(Netty, port = 8080, host = "0.0.0.0", module = Application::module)

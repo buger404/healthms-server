@@ -1,4 +1,4 @@
-package para.party.entity
+package party.para.entity
 
 import org.ktorm.database.Database
 import org.ktorm.entity.Entity

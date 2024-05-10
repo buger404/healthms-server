@@ -1,4 +1,4 @@
-package para.party.plugins
+package party.para.plugins
 
 import io.ktor.http.*
 import io.ktor.serialization.jackson.*
@@ -7,7 +7,7 @@ import io.ktor.server.engine.*
 import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.response.*
-import para.party.serialization.jsonMapper
+import party.para.serialization.jsonMapper
 
 fun Application.registerMiddleware() {
     install(ContentNegotiation) {

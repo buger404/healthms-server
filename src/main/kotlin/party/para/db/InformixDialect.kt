@@ -1,4 +1,4 @@
-package para.party.db
+package party.para.db
 
 import org.ktorm.database.Database
 import org.ktorm.database.SqlDialect

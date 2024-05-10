@@ -1,4 +1,4 @@
-package para.party.db
+package party.para.db
 
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource

@@ -7,11 +7,11 @@ plugins {
     id("io.ktor.plugin") version "2.3.10"
 }
 
-group = "para.party"
+group = "party.para"
 version = "0.0.1"
 
 application {
-    mainClass.set("para.party.ApplicationKt")
+    mainClass.set("party.para.ApplicationKt")
 
     val isDevelopment: Boolean = project.ext.has("development")
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")

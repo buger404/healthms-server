@@ -1,4 +1,4 @@
-package para.party.handler
+package party.para.handler
 
 import io.ktor.server.application.*
 import io.ktor.server.request.*
@@ -7,10 +7,10 @@ import io.ktor.util.pipeline.*
 import org.ktorm.dsl.eq
 import org.ktorm.entity.add
 import org.ktorm.entity.firstOrNull
-import para.party.db.db
-import para.party.entity.User
-import para.party.entity.users
-import para.party.model.RegisterRequest
+import party.para.db.db
+import party.para.entity.User
+import party.para.entity.users
+import party.para.model.RegisterRequest
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 import java.util.*
