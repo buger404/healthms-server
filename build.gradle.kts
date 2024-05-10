@@ -43,7 +43,6 @@ dependencies {
     api("org.ktorm:ktorm-core:3.6.0")
     // https://mvnrepository.com/artifact/org.ktorm/ktorm-jackson
     api("org.ktorm:ktorm-jackson:3.6.0")
-    // https://mvnrepository.com/artifact/org.ktorm/ktorm-support-mysql
 
     api("com.fasterxml.jackson.module:jackson-module-kotlin:2.17.1")
     api("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.17.1")
@@ -53,6 +52,5 @@ dependencies {
     compileOnly("com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.17.1")
     api("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.17.1")
 
-    api("org.ktorm:ktorm-support-mysql:3.6.0")
     api(files("libraries/com.sinodbms.jdbc.jar"))
 }

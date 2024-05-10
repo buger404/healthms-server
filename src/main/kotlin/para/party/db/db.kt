@@ -3,8 +3,6 @@ package para.party.db
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import org.ktorm.database.Database
-import org.ktorm.support.mysql.MySqlDialect
-
 
 val dataSource by lazy {
     HikariDataSource(HikariConfig().apply {
@@ -18,5 +16,5 @@ val dataSource by lazy {
 }
 
 val db by lazy {
-    Database.connect(dataSource, dialect = MySqlDialect())
+    Database.connect(dataSource)
 }
