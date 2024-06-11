@@ -40,9 +40,7 @@ suspend fun PipelineContext<Unit, ApplicationCall>.registerHandler(unused: Unit)
         return
     }
 
-    if (db.users.firstOrNull {
-            (it.username eq requestBody.username!!) and (it.password eq requestBody.password!!)
-        } != null){
+    if (db.users.firstOrNull { it.username eq requestBody.username!! } != null){
         call.respond(RegisterResponse(status = "failed", message = "该用户名已存在，请更换用户名。"))
         return
     }
@@ -67,10 +65,13 @@ suspend fun PipelineContext<Unit, ApplicationCall>.loginHandler(unused: Unit){
         return
     }
 
-    val user = db.users.firstOrNull {
-        (it.username eq req.username!!) and (it.password eq req.password!!)
-    }
+    val user = db.users.firstOrNull { (it.username eq req.username!!) }
     if (user == null){
+        call.respond(LoginResponse(status = "failed", message = "用户不存在。", token = null))
+        return
+    }
+
+    if (user.password != req.password){
         call.respond(LoginResponse(status = "failed", message = "用户名或密码错误。", token = null))
         return
     }
