@@ -25,5 +25,6 @@ fun Application.registerRoute() {
         post("/register", PipelineContext<Unit, ApplicationCall>::registerHandler)
         post("/login", PipelineContext<Unit, ApplicationCall>::loginHandler)
         get("/users/{id}", PipelineContext<Unit, ApplicationCall>::getUserHandler)
+        get("/chaperone/list", PipelineContext<Unit, ApplicationCall>::getChaperoneListHandler)
     }
 }

@@ -3,10 +3,7 @@ package party.para.entity
 import org.ktorm.database.Database
 import org.ktorm.entity.Entity
 import org.ktorm.entity.sequenceOf
-import org.ktorm.schema.Table
-import org.ktorm.schema.datetime
-import org.ktorm.schema.long
-import org.ktorm.schema.varchar
+import org.ktorm.schema.*
 import java.time.LocalDateTime
 
 interface User : Entity<User> {
@@ -16,6 +13,7 @@ interface User : Entity<User> {
     var password: String
     var createdAt: LocalDateTime
     var updatedAt: LocalDateTime
+    var money: Float
 }
 
 object Users : Table<User>("users") {
@@ -24,6 +22,7 @@ object Users : Table<User>("users") {
     val password = varchar("password").bindTo { it.password }
     val createdAt = datetime("created_at").bindTo { it.createdAt }
     val updatedAt = datetime("updated_at").bindTo { it.updatedAt }
+    var money = float("money").bindTo { it.money }
 }
 
 val Database.users get() = this.sequenceOf(Users)

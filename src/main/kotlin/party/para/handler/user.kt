@@ -1,5 +1,7 @@
 package party.para.handler
 
+import ch.qos.logback.core.subst.Token
+import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
@@ -11,10 +13,7 @@ import org.ktorm.entity.firstOrNull
 import party.para.db.db
 import party.para.entity.User
 import party.para.entity.users
-import party.para.model.LoginRequest
-import party.para.model.LoginResponse
-import party.para.model.RegisterRequest
-import party.para.model.RegisterResponse
+import party.para.model.*
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 import java.util.*
@@ -23,8 +22,16 @@ object TokenStore {
     val userMap: MutableMap<String, String> = mutableMapOf()
 }
 
-suspend fun checkUsername(username : String) : Boolean{
+fun checkUsername(username : String) : Boolean{
     return !username.any { !(it.isDigit() || it.isLetter()) }
+}
+
+suspend fun validateToken(call : ApplicationCall, token : String?) : Boolean{
+    if (!TokenStore.userMap.containsKey(token)){
+        call.respond(HttpStatusCode.Forbidden, ErrorResponse("请先登录！"));
+        return false;
+    }
+    return true;
 }
 
 suspend fun PipelineContext<Unit, ApplicationCall>.registerHandler(unused: Unit) {
