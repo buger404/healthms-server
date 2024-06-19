@@ -18,13 +18,12 @@ fun Application.registerRoute() {
     install(AutoHeadResponse)
     routing {
         get("/") {
-            call.respondText("Hello World!")
+            call.respondText("Health MS Server!")
         }
-
 
         post("/register", PipelineContext<Unit, ApplicationCall>::registerHandler)
         post("/login", PipelineContext<Unit, ApplicationCall>::loginHandler)
-        get("/users/{id}", PipelineContext<Unit, ApplicationCall>::getUserHandler)
+        get("/users/info", PipelineContext<Unit, ApplicationCall>::getUserHandler)
         get("/chaperone/list", PipelineContext<Unit, ApplicationCall>::getChaperoneListHandler)
         get("/hospital/list", PipelineContext<Unit, ApplicationCall>::getHospitalListHandler)
     }

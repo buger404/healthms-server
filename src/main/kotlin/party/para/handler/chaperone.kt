@@ -8,9 +8,7 @@ import io.ktor.server.response.*
 import io.ktor.util.pipeline.*
 import org.ktorm.dsl.and
 import org.ktorm.dsl.eq
-import org.ktorm.entity.add
-import org.ktorm.entity.all
-import org.ktorm.entity.firstOrNull
+import org.ktorm.entity.*
 import party.para.db.db
 import party.para.entity.User
 import party.para.entity.chaperones
@@ -19,6 +17,7 @@ import party.para.model.*
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 import party.para.handler.validateToken
+import party.para.plugins.findAll
 import java.util.*
 
 suspend fun PipelineContext<Unit, ApplicationCall>.getChaperoneListHandler(unused: Unit){
@@ -30,8 +29,8 @@ suspend fun PipelineContext<Unit, ApplicationCall>.getChaperoneListHandler(unuse
     }
 
     if (id == -1){
-        call.respond(db.chaperones)
+        call.respond(db.chaperones.toList())
     }else{
-        call.respond(db.chaperones.all { it.hospital eq id })
+        call.respond(db.chaperones.findAll { it.hospital == id })
     }
 }

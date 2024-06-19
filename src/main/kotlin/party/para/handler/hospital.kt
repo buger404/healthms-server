@@ -11,6 +11,7 @@ import org.ktorm.dsl.eq
 import org.ktorm.entity.add
 import org.ktorm.entity.all
 import org.ktorm.entity.firstOrNull
+import org.ktorm.entity.toList
 import party.para.db.db
 import party.para.entity.User
 import party.para.entity.chaperones
@@ -29,5 +30,5 @@ suspend fun PipelineContext<Unit, ApplicationCall>.getHospitalListHandler(unused
         return
     }
 
-    call.respond(db.hospitals)
+    call.respond(db.hospitals.toList())
 }

@@ -89,7 +89,14 @@ suspend fun PipelineContext<Unit, ApplicationCall>.loginHandler(unused: Unit){
 }
 
 suspend fun PipelineContext<Unit, ApplicationCall>.getUserHandler(unused: Unit) {
-    val id = call.parameters["id"] ?: throw InvalidBodyException("?")
-    val result = db.users.firstOrNull { it.id eq id } ?: throw Exception("找不到")
-    call.respond(result)
+    val token = call.parameters["token"]
+    if (!validateToken(call, token)){
+        return
+    }
+
+    val result = db.users.firstOrNull { it.id eq (TokenStore.userMap[token] ?: "") }
+
+    if (result != null) {
+        call.respond(result)
+    }
 }
