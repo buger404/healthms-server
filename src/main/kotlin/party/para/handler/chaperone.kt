@@ -17,7 +17,6 @@ import party.para.model.*
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 import party.para.handler.validateToken
-import party.para.plugins.findAll
 import java.util.*
 
 suspend fun PipelineContext<Unit, ApplicationCall>.getChaperoneListHandler(unused: Unit){
@@ -31,6 +30,6 @@ suspend fun PipelineContext<Unit, ApplicationCall>.getChaperoneListHandler(unuse
     if (id == -1){
         call.respond(db.chaperones.toList())
     }else{
-        call.respond(db.chaperones.findAll { it.hospital == id })
+        call.respond(db.chaperones.filter { it.hospital eq id }.toList())
     }
 }
