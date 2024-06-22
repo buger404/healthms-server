@@ -16,6 +16,7 @@ interface Chaperone : Entity<Chaperone> {
     var price : Float
     var phone : String
     var reserved : Int
+    var praised : Int
 }
 
 object Chaperones : Table<Chaperone>("chaperone") {
@@ -27,6 +28,7 @@ object Chaperones : Table<Chaperone>("chaperone") {
     val price = float("price").bindTo { it.price }
     val phone = varchar("phone").bindTo { it.phone }
     val reserved = int("reserved").bindTo { it.reserved }
+    val praised = int("praised").bindTo { it.praised }
 }
 
 val Database.chaperones get() = this.sequenceOf(Chaperones)

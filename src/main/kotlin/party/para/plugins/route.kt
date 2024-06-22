@@ -37,6 +37,12 @@ fun Application.registerRoute() {
         get("/reservation/list", PipelineContext<Unit, ApplicationCall>::getReservationListHandler)
         post("/reservation/submit", PipelineContext<Unit, ApplicationCall>::submitReservationHandler)
         post("/reservation/cancel", PipelineContext<Unit, ApplicationCall>::cancelReservationHandler)
+        post("/reservation/checkout", PipelineContext<Unit, ApplicationCall>::checkoutHandler)
 
+        get("/feedback/list", PipelineContext<Unit, ApplicationCall>::getFeedbackListHandler)
+        get("/feedback/like/list", PipelineContext<Unit, ApplicationCall>::getLikeCommentListHandler)
+        post("/feedback/delete", PipelineContext<Unit, ApplicationCall>::deleteFeedbackHandler)
+        post("/feedback/like", PipelineContext<Unit, ApplicationCall>::likeCommentHandler)
+        post("/feedback/unlike", PipelineContext<Unit, ApplicationCall>::unlikeCommentHandler)
     }
 }
