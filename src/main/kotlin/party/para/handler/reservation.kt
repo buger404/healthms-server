@@ -30,7 +30,7 @@ suspend fun PipelineContext<Unit, ApplicationCall>.submitReservationHandler(unus
     }
 
     val userID = TokenStore.userMap[token] ?: ""
-    val chaperoneID = call.parameters["chaperone"]?.toInt() ?: -1
+    val chaperoneID = call.parameters["chaperone"] ?: ""
 
     val chaperoneObj = db.chaperones.firstOrNull { it.id eq chaperoneID }
 
@@ -71,7 +71,7 @@ suspend fun PipelineContext<Unit, ApplicationCall>.cancelReservationHandler(unus
     }
 
     val userID = TokenStore.userMap[token] ?: ""
-    val chaperoneID = call.parameters["chaperone"]?.toInt() ?: -1
+    val chaperoneID = call.parameters["chaperone"] ?: ""
 
     val chaperoneObj = db.chaperones.firstOrNull { it.id eq chaperoneID }
 

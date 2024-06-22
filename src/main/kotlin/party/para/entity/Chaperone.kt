@@ -8,7 +8,7 @@ import java.time.LocalDateTime
 
 interface Chaperone : Entity<Chaperone> {
     companion object : Entity.Factory<Chaperone>()
-    var id: Int
+    var id: String
     var hospital : Int
     var name: String
     var startHour : Int
@@ -19,7 +19,7 @@ interface Chaperone : Entity<Chaperone> {
 }
 
 object Chaperones : Table<Chaperone>("chaperone") {
-    val id = int("id").primaryKey().bindTo { it.id }
+    val id = varchar("id").primaryKey().bindTo { it.id }
     val hospital = int("hospital").bindTo { it.hospital }
     val name = varchar("name").bindTo { it.name }
     val startHour = int("start_hour").bindTo { it.startHour }

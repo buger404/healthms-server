@@ -10,13 +10,13 @@ interface Reservation : Entity<Reservation> {
     companion object : Entity.Factory<Reservation>()
     var id: String
     var user : String
-    var chaperone : Int
+    var chaperone : String
 }
 
 object Reservations : Table<Reservation>("reservation") {
     val id = varchar("id").primaryKey().bindTo { it.id }
     val user = varchar("user").bindTo { it.user }
-    val chaperone = int("chaperone").bindTo { it.chaperone }
+    val chaperone = varchar("chaperone").bindTo { it.chaperone }
 }
 
 val Database.reservations get() = this.sequenceOf(Reservations)

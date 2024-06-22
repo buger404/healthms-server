@@ -9,6 +9,7 @@ import io.ktor.util.pipeline.*
 import org.ktorm.dsl.and
 import org.ktorm.dsl.eq
 import org.ktorm.entity.add
+import org.ktorm.entity.first
 import org.ktorm.entity.firstOrNull
 import party.para.db.db
 import party.para.entity.User
@@ -99,4 +100,18 @@ suspend fun PipelineContext<Unit, ApplicationCall>.getUserHandler(unused: Unit) 
     if (result != null) {
         call.respond(result)
     }
+}
+
+suspend fun PipelineContext<Unit, ApplicationCall>.rechargeUserHandler(unused: Unit) {
+    val token = call.parameters["token"]
+    if (!validateToken(call, token)){
+        return
+    }
+
+    val money = call.parameters["money"]?.toFloat() ?: 0f
+    val user = db.users.first { it.id eq (TokenStore.userMap[token] ?: "") }
+
+    user.money += money
+
+    call.respond(user)
 }

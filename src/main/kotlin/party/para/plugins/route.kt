@@ -23,11 +23,20 @@ fun Application.registerRoute() {
 
         post("/register", PipelineContext<Unit, ApplicationCall>::registerHandler)
         post("/login", PipelineContext<Unit, ApplicationCall>::loginHandler)
+
         get("/users/info", PipelineContext<Unit, ApplicationCall>::getUserHandler)
+        post("/users/recharge", PipelineContext<Unit, ApplicationCall>::rechargeUserHandler)
+
         get("/chaperone/list", PipelineContext<Unit, ApplicationCall>::getChaperoneListHandler)
+        post("/chaperone/join", PipelineContext<Unit, ApplicationCall>::joinChaperoneHandler)
+        post("/chaperone/update", PipelineContext<Unit, ApplicationCall>::updateChaperoneHandler)
+        post("/chaperone/quit", PipelineContext<Unit, ApplicationCall>::quitChaperoneHandler)
+
         get("/hospital/list", PipelineContext<Unit, ApplicationCall>::getHospitalListHandler)
+
         get("/reservation/list", PipelineContext<Unit, ApplicationCall>::getReservationListHandler)
         post("/reservation/submit", PipelineContext<Unit, ApplicationCall>::submitReservationHandler)
         post("/reservation/cancel", PipelineContext<Unit, ApplicationCall>::cancelReservationHandler)
+
     }
 }

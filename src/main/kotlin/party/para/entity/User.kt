@@ -14,7 +14,7 @@ interface User : Entity<User> {
     var createdAt: LocalDateTime
     var updatedAt: LocalDateTime
     var money: Float
-    var partTime: Int
+    var partTime: String
 }
 
 object Users : Table<User>("users") {
@@ -24,7 +24,7 @@ object Users : Table<User>("users") {
     val createdAt = datetime("created_at").bindTo { it.createdAt }
     val updatedAt = datetime("updated_at").bindTo { it.updatedAt }
     var money = float("money").bindTo { it.money }
-    var partTime = int("part_time").bindTo { it.partTime }
+    var partTime = varchar("part_time").bindTo { it.partTime }
 }
 
 val Database.users get() = this.sequenceOf(Users)
