@@ -26,5 +26,8 @@ fun Application.registerRoute() {
         get("/users/info", PipelineContext<Unit, ApplicationCall>::getUserHandler)
         get("/chaperone/list", PipelineContext<Unit, ApplicationCall>::getChaperoneListHandler)
         get("/hospital/list", PipelineContext<Unit, ApplicationCall>::getHospitalListHandler)
+        get("/reservation/list", PipelineContext<Unit, ApplicationCall>::getReservationListHandler)
+        post("/reservation/submit", PipelineContext<Unit, ApplicationCall>::submitReservationHandler)
+        post("/reservation/cancel", PipelineContext<Unit, ApplicationCall>::cancelReservationHandler)
     }
 }
