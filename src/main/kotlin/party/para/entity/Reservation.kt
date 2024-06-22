@@ -11,12 +11,14 @@ interface Reservation : Entity<Reservation> {
     var id: String
     var user : String
     var chaperone : String
+    var price : Float
 }
 
 object Reservations : Table<Reservation>("reservation") {
     val id = varchar("id").primaryKey().bindTo { it.id }
     val user = varchar("user").bindTo { it.user }
     val chaperone = varchar("chaperone").bindTo { it.chaperone }
+    val price = float("price").bindTo { it.price }
 }
 
 val Database.reservations get() = this.sequenceOf(Reservations)

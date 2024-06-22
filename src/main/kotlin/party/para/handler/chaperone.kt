@@ -110,6 +110,15 @@ suspend fun PipelineContext<Unit, ApplicationCall>.quitChaperoneHandler(unused: 
         return
     }
 
+    for ( reservation in db.reservations.filter { it.chaperone eq userObj.partTime }){
+        try{
+            cancelReservation(userID, reservation.id)
+        }catch (ex : Exception){
+            call.respond(JoinChaperoneResponse("failed", "退出兼职失败！无法取消现有预约，因为：" + ex.message, null))
+            return
+        }
+    }
+
     db.chaperones.removeIf { it.id eq userObj.partTime }
     userObj.partTime = ""
 

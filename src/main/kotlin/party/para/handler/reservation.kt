@@ -54,13 +54,46 @@ suspend fun PipelineContext<Unit, ApplicationCall>.submitReservationHandler(unus
         id = UUID.randomUUID().toString()
         user = userID
         chaperone = chaperoneID
+        price = chaperoneObj.price
     }
     db.reservations.add(reservation)
 
     userObj.money -= chaperoneObj.price
     chaperoneObj.reserved++
 
-    call.respond(SubmitReservationResponse(status = "succeed", message = null))
+    val chaperoneUser = db.users.firstOrNull { it.partTime eq chaperoneID }
+    if (chaperoneUser != null){
+        chaperoneUser.money += chaperoneObj.price
+    }
+
+    call.respond(SubmitReservationResponse(status = "succeed", message = reservation.id))
+}
+
+fun cancelReservation(operatorID : String, reservationID : String){
+    val reservation = db.reservations.firstOrNull { it.id eq reservationID }
+
+    if (reservation == null){
+        throw Exception("指定的预约不存在！")
+    }
+
+    val operatorObj = db.users.first { it.id eq operatorID }
+    if (reservation.user != operatorID && reservation.chaperone != operatorObj.partTime){
+        throw Exception("您无权取消此预约。")
+    }
+
+    val userObj = db.users.first { it.id eq reservation.user }
+    userObj.money += reservation.price
+
+    val chaperoneUser = db.users.firstOrNull { it.partTime eq reservation.chaperone }
+    if (chaperoneUser != null){
+        chaperoneUser.money -= reservation.price
+    }
+    val chaperoneObj = db.chaperones.firstOrNull { it.id eq reservation.chaperone }
+    if (chaperoneObj != null){
+        chaperoneObj.reserved--
+    }
+
+    db.reservations.removeIf { it.id eq reservationID }
 }
 
 suspend fun PipelineContext<Unit, ApplicationCall>.cancelReservationHandler(unused: Unit){
@@ -70,26 +103,14 @@ suspend fun PipelineContext<Unit, ApplicationCall>.cancelReservationHandler(unus
         return
     }
 
-    val userID = TokenStore.userMap[token] ?: ""
-    val chaperoneID = call.parameters["chaperone"] ?: ""
+    val operatorID = TokenStore.userMap[token] ?: ""
+    val reservationID = call.parameters["reservation"] ?: ""
 
-    val chaperoneObj = db.chaperones.firstOrNull { it.id eq chaperoneID }
-
-    if (chaperoneObj == null){
-        call.respond(SubmitReservationResponse("failed", "指定的陪诊师不存在！"))
-        return
+    try{
+        cancelReservation(operatorID, reservationID)
+    }catch (ex : Exception){
+        call.respond(SubmitReservationResponse("failed", ex.message))
     }
-
-    if (!db.reservations.any { (it.user eq userID) and (it.chaperone eq chaperoneID) }){
-        call.respond(SubmitReservationResponse("failed", "指定的预约不存在！"))
-        return
-    }
-
-    db.reservations.removeIf { (it.user eq userID) and (it.chaperone eq chaperoneID) }
-
-    val userObj = db.users.first { it.id eq userID }
-    userObj.money += chaperoneObj.price
-    chaperoneObj.reserved--
 
     call.respond(SubmitReservationResponse(status = "succeed", message = null))
 }
