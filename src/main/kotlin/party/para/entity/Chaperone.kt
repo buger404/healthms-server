@@ -4,6 +4,7 @@ import org.ktorm.database.Database
 import org.ktorm.entity.Entity
 import org.ktorm.entity.sequenceOf
 import org.ktorm.schema.*
+import java.math.BigDecimal
 import java.time.LocalDateTime
 
 interface Chaperone : Entity<Chaperone> {
@@ -13,7 +14,7 @@ interface Chaperone : Entity<Chaperone> {
     var name: String
     var startHour : Int
     var endHour : Int
-    var price : Float
+    var price : BigDecimal
     var phone : String
     var reserved : Int
     var praised : Int
@@ -25,7 +26,7 @@ object Chaperones : Table<Chaperone>("chaperone") {
     val name = varchar("name").bindTo { it.name }
     val startHour = int("start_hour").bindTo { it.startHour }
     val endHour = int("end_hour").bindTo { it.endHour }
-    val price = float("price").bindTo { it.price }
+    val price = decimal("price").bindTo { it.price }
     val phone = varchar("phone").bindTo { it.phone }
     val reserved = int("reserved").bindTo { it.reserved }
     val praised = int("praised").bindTo { it.praised }

@@ -15,6 +15,7 @@ import party.para.db.db
 import party.para.entity.User
 import party.para.entity.users
 import party.para.model.*
+import java.math.BigDecimal
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 import java.util.*
@@ -59,6 +60,8 @@ suspend fun PipelineContext<Unit, ApplicationCall>.registerHandler(unused: Unit)
         password = requestBody.password!!
         createdAt = LocalDateTime.now()
         updatedAt = LocalDateTime.now()
+        money = BigDecimal.ZERO
+        partTime = ""
     }
     db.users.add(user)
 
@@ -108,7 +111,7 @@ suspend fun PipelineContext<Unit, ApplicationCall>.rechargeUserHandler(unused: U
         return
     }
 
-    val money = call.parameters["money"]?.toFloat() ?: 0f
+    val money = call.parameters["money"]?.toBigDecimal() ?: BigDecimal.ZERO
     val user = db.users.first { it.id eq (TokenStore.userMap[token] ?: "") }
 
     user.money += money

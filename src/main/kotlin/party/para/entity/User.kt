@@ -1,9 +1,11 @@
 package party.para.entity
 
+import com.sinodbms.lang.Decimal
 import org.ktorm.database.Database
 import org.ktorm.entity.Entity
 import org.ktorm.entity.sequenceOf
 import org.ktorm.schema.*
+import java.math.BigDecimal
 import java.time.LocalDateTime
 
 interface User : Entity<User> {
@@ -13,7 +15,7 @@ interface User : Entity<User> {
     var password: String
     var createdAt: LocalDateTime
     var updatedAt: LocalDateTime
-    var money: Float
+    var money: BigDecimal
     var partTime: String
 }
 
@@ -23,7 +25,7 @@ object Users : Table<User>("users") {
     val password = varchar("password").bindTo { it.password }
     val createdAt = datetime("created_at").bindTo { it.createdAt }
     val updatedAt = datetime("updated_at").bindTo { it.updatedAt }
-    var money = float("money").bindTo { it.money }
+    var money = decimal("money").bindTo { it.money }
     var partTime = varchar("part_time").bindTo { it.partTime }
 }
 

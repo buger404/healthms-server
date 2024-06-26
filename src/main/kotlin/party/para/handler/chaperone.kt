@@ -8,6 +8,7 @@ import io.ktor.server.response.*
 import io.ktor.util.pipeline.*
 import org.ktorm.dsl.and
 import org.ktorm.dsl.eq
+import org.ktorm.dsl.less
 import org.ktorm.entity.*
 import party.para.db.db
 import party.para.entity.*
@@ -15,6 +16,7 @@ import party.para.model.*
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 import party.para.handler.validateToken
+import java.math.BigDecimal
 import java.util.*
 
 suspend fun PipelineContext<Unit, ApplicationCall>.getChaperoneListHandler(unused: Unit){
@@ -38,7 +40,7 @@ suspend fun checkChaperoneData(data : JoinChaperoneRequest, call : ApplicationCa
         return false
     }
 
-    if (data.price < 0){
+    if (data.price < BigDecimal.ZERO){
         call.respond(JoinChaperoneResponse("failed", "设定的价格不能是负数。", null))
         return false
     }
