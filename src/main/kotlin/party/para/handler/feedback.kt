@@ -6,8 +6,7 @@ import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.util.pipeline.*
-import org.ktorm.dsl.and
-import org.ktorm.dsl.eq
+import org.ktorm.dsl.*
 import org.ktorm.entity.*
 import party.para.db.db
 import party.para.entity.*
@@ -26,7 +25,26 @@ suspend fun PipelineContext<Unit, ApplicationCall>.getFeedbackListHandler(unused
 
     val chaperone = call.parameters["chaperone"] ?: ""
 
-    call.respond(db.feedbacks.filter { it.chaperone eq chaperone }.toList())
+    val feedbackList = db.from(Feedbacks)
+        .innerJoin(Users, on = Feedbacks.user eq Users.id)
+        .innerJoin(PraisedTable, on = (Feedbacks.user eq PraisedTable.user) and (Feedbacks.id eq PraisedTable.id))
+        .select(Feedbacks.columns + Users.username + PraisedTable.id)
+        .where { Feedbacks.chaperone eq chaperone }
+        .map { row ->
+            val feedback = Feedbacks.createEntity(row)
+            val username = row[Users.username]
+            mapOf(
+                "id" to feedback.id,
+                "comment" to feedback.comment,
+                "username" to username,
+                "sendTime" to feedback.createdAt,
+                "likes" to feedback.likes,
+                "praised" to feedback.praise,
+                "liked" to (!row[PraisedTable.id].isNullOrEmpty())
+            )
+        }
+
+    call.respond(feedbackList)
 }
 
 suspend fun PipelineContext<Unit, ApplicationCall>.getLikeCommentListHandler(unused: Unit){
