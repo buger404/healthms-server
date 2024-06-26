@@ -118,3 +118,14 @@ suspend fun PipelineContext<Unit, ApplicationCall>.rechargeUserHandler(unused: U
 
     call.respond(user)
 }
+
+suspend fun PipelineContext<Unit, ApplicationCall>.logoutHandler(unused: Unit) {
+    val token = call.parameters["token"]
+    if (!validateToken(call, token)){
+        return
+    }
+
+    TokenStore.userMap.remove(token)
+
+    call.respond("ok")
+}

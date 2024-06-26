@@ -23,6 +23,7 @@ fun Application.registerRoute() {
 
         post("/register", PipelineContext<Unit, ApplicationCall>::registerHandler)
         post("/login", PipelineContext<Unit, ApplicationCall>::loginHandler)
+        post("/logout", PipelineContext<Unit, ApplicationCall>::logoutHandler)
 
         get("/users/info", PipelineContext<Unit, ApplicationCall>::getUserHandler)
         post("/users/recharge", PipelineContext<Unit, ApplicationCall>::rechargeUserHandler)
