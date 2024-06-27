@@ -91,8 +91,9 @@ suspend fun PipelineContext<Unit, ApplicationCall>.submitReservationHandler(unus
     db.reservations.add(reservation)
 
     userObj.money -= chaperoneObj.price
-    chaperoneObj.reserved++
     userObj.flushChanges()
+
+    chaperoneObj.reserved++
     chaperoneObj.flushChanges()
 
     val chaperoneUser = db.users.firstOrNull { it.partTime eq chaperoneID }

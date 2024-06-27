@@ -24,11 +24,11 @@ suspend fun PipelineContext<Unit, ApplicationCall>.getFeedbackListHandler(unused
     }
 
     val chaperone = call.parameters["chaperone"] ?: ""
+    val userID = TokenStore.userMap[token] ?: ""
 
     val feedbackList = db.from(Feedbacks)
         .innerJoin(Users, on = Feedbacks.user eq Users.id)
-        .innerJoin(PraisedTable, on = (Feedbacks.user eq PraisedTable.user) and (Feedbacks.id eq PraisedTable.id))
-        .select(Feedbacks.columns + Users.username + PraisedTable.id)
+        .select(Feedbacks.columns + Users.username)
         .where { Feedbacks.chaperone eq chaperone }
         .map { row ->
             val feedback = Feedbacks.createEntity(row)
@@ -40,7 +40,7 @@ suspend fun PipelineContext<Unit, ApplicationCall>.getFeedbackListHandler(unused
                 "sendTime" to feedback.createdAt,
                 "likes" to feedback.likes,
                 "praised" to feedback.praise,
-                "liked" to (!row[PraisedTable.id].isNullOrEmpty())
+                "liked" to db.praised.any { (it.user eq userID) and (it.feedback eq feedback.id) }
             )
         }
 
