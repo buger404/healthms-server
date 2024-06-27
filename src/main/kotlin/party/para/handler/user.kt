@@ -115,6 +115,7 @@ suspend fun PipelineContext<Unit, ApplicationCall>.rechargeUserHandler(unused: U
     val user = db.users.first { it.id eq (TokenStore.userMap[token] ?: "") }
 
     user.money += money
+    user.flushChanges()
 
     call.respond(user)
 }

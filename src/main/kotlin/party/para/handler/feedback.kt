@@ -97,6 +97,7 @@ suspend fun PipelineContext<Unit, ApplicationCall>.checkoutHandler(unused: Unit)
     val chaperoneObj = db.chaperones.firstOrNull { it.id eq reservation.chaperone }
     if (chaperoneObj != null && req.praise){
         chaperoneObj.praised++
+        chaperoneObj.flushChanges()
     }
 
     db.reservations.removeIf { it.id eq reservationID }
@@ -126,8 +127,8 @@ suspend fun PipelineContext<Unit, ApplicationCall>.deleteFeedbackHandler(unused:
         return
     }
 
-    db.feedbacks.removeIf { it.id eq feedbackID }
     db.praised.removeIf { it.feedback eq feedbackID }
+    db.feedbacks.removeIf { it.id eq feedbackID }
 
     call.respond(CheckoutResponse("succeed", null, null))
 }
@@ -162,6 +163,7 @@ suspend fun PipelineContext<Unit, ApplicationCall>.likeCommentHandler(unused: Un
     db.praised.add(praised)
 
     feedbackObj.likes++
+    feedbackObj.flushChanges()
 
     call.respond(CheckoutResponse("succeed", null, null))
 }
@@ -191,6 +193,7 @@ suspend fun PipelineContext<Unit, ApplicationCall>.unlikeCommentHandler(unused: 
     db.praised.removeIf { (it.user eq operatorID) and (it.feedback eq feedbackID) }
 
     feedbackObj.likes--
+    feedbackObj.flushChanges()
 
     call.respond(CheckoutResponse("succeed", null, null))
 }

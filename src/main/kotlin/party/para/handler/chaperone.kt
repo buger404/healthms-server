@@ -88,6 +88,7 @@ suspend fun PipelineContext<Unit, ApplicationCall>.joinChaperoneHandler(unused: 
     db.chaperones.add(chaperone)
 
     userObj.partTime = chaperone.id
+    userObj.flushChanges()
 
     call.respond(JoinChaperoneResponse("succeed", "您已加入陪诊师兼职！", chaperone.id))
 }
@@ -109,6 +110,7 @@ suspend fun PipelineContext<Unit, ApplicationCall>.quitChaperoneHandler(unused: 
 
     if (!db.chaperones.any { it.id eq userObj.partTime }){
         userObj.partTime = ""
+        userObj.flushChanges()
         call.respond(JoinChaperoneResponse("failed", "你当前没有兼职陪诊师信息不存在，已重置为未兼职状态。", null))
         return
     }
@@ -124,6 +126,7 @@ suspend fun PipelineContext<Unit, ApplicationCall>.quitChaperoneHandler(unused: 
 
     db.chaperones.removeIf { it.id eq userObj.partTime }
     userObj.partTime = ""
+    userObj.flushChanges()
 
     call.respond(JoinChaperoneResponse("succeed", "您已退出陪诊师兼职。", null))
 }
@@ -152,6 +155,7 @@ suspend fun PipelineContext<Unit, ApplicationCall>.updateChaperoneHandler(unused
     val chaperone = db.chaperones.firstOrNull { it.id eq userObj.partTime }
     if (chaperone == null){
         userObj.partTime = ""
+        userObj.flushChanges()
         call.respond(JoinChaperoneResponse("failed", "你当前没有兼职陪诊师信息不存在，已重置为未兼职状态。", null))
         return
     }
@@ -164,6 +168,7 @@ suspend fun PipelineContext<Unit, ApplicationCall>.updateChaperoneHandler(unused
         price = req.price
         phone = req.phone
     }
+    chaperone.flushChanges()
 
     call.respond(JoinChaperoneResponse("succeed", "兼职信息修改成功！", null))
 }

@@ -74,10 +74,13 @@ suspend fun PipelineContext<Unit, ApplicationCall>.submitReservationHandler(unus
 
     userObj.money -= chaperoneObj.price
     chaperoneObj.reserved++
+    userObj.flushChanges()
+    chaperoneObj.flushChanges()
 
     val chaperoneUser = db.users.firstOrNull { it.partTime eq chaperoneID }
     if (chaperoneUser != null){
         chaperoneUser.money += chaperoneObj.price
+        chaperoneUser.flushChanges()
     }
 
     call.respond(SubmitReservationResponse(status = "succeed", message = reservation.id))
@@ -97,14 +100,17 @@ fun cancelReservation(operatorID : String, reservationID : String){
 
     val userObj = db.users.first { it.id eq reservation.user }
     userObj.money += reservation.price
+    userObj.flushChanges()
 
     val chaperoneUser = db.users.firstOrNull { it.partTime eq reservation.chaperone }
     if (chaperoneUser != null){
         chaperoneUser.money -= reservation.price
+        chaperoneUser.flushChanges()
     }
     val chaperoneObj = db.chaperones.firstOrNull { it.id eq reservation.chaperone }
     if (chaperoneObj != null){
         chaperoneObj.reserved--
+        chaperoneObj.flushChanges()
     }
 
     db.reservations.removeIf { it.id eq reservationID }
