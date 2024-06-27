@@ -3,8 +3,7 @@ package party.para.handler
 import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.util.pipeline.*
-import org.ktorm.dsl.and
-import org.ktorm.dsl.eq
+import org.ktorm.dsl.*
 import org.ktorm.entity.*
 import party.para.db.db
 import party.para.entity.*
@@ -19,7 +18,22 @@ suspend fun PipelineContext<Unit, ApplicationCall>.getReservationListHandler(unu
     }
 
     val user = TokenStore.userMap[token] ?: ""
-    call.respond(db.reservations.filter { it.user eq user }.toList())
+    val list = db.from(Reservations)
+        .innerJoin(Chaperones, on = Chaperones.id eq Reservations.chaperone)
+        .select(Reservations.columns + Chaperones.columns)
+        .where(Reservations.user eq user)
+        .map { row ->
+            val reservation = Reservations.createEntity(row)
+            val chaperone = Chaperones.createEntity(row)
+            mapOf(
+                "id" to reservation.id,
+                "chaperone" to reservation.chaperone,
+                "price" to reservation.price,
+                "chaperoneInfo" to chaperone
+            )
+        }
+
+    call.respond(list)
 }
 
 suspend fun PipelineContext<Unit, ApplicationCall>.submitReservationHandler(unused: Unit){

@@ -127,5 +127,5 @@ suspend fun PipelineContext<Unit, ApplicationCall>.logoutHandler(unused: Unit) {
 
     TokenStore.userMap.remove(token)
 
-    call.respond("ok")
+    call.respond(mapOf("status" to "succeed"))
 }
