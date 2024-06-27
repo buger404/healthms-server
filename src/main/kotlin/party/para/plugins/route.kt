@@ -28,6 +28,7 @@ fun Application.registerRoute() {
         get("/users/info", PipelineContext<Unit, ApplicationCall>::getUserHandler)
         post("/users/recharge", PipelineContext<Unit, ApplicationCall>::rechargeUserHandler)
 
+        get("/chaperone/reserved", PipelineContext<Unit, ApplicationCall>::isReservedHandler)
         get("/chaperone/list", PipelineContext<Unit, ApplicationCall>::getChaperoneListHandler)
         post("/chaperone/join", PipelineContext<Unit, ApplicationCall>::joinChaperoneHandler)
         post("/chaperone/update", PipelineContext<Unit, ApplicationCall>::updateChaperoneHandler)

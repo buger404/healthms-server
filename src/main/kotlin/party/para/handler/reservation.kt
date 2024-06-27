@@ -36,6 +36,24 @@ suspend fun PipelineContext<Unit, ApplicationCall>.getReservationListHandler(unu
     call.respond(list)
 }
 
+suspend fun PipelineContext<Unit, ApplicationCall>.isReservedHandler(unused: Unit){
+    val token = call.parameters["token"]
+
+    if (!validateToken(call, token)){
+        return
+    }
+
+    val user = TokenStore.userMap[token] ?: ""
+    val chaperone = call.parameters["chaperone"] ?: ""
+
+    call.respond(
+        mapOf(
+            "status" to "succeed",
+            "id" to (db.reservations.firstOrNull { (it.chaperone eq chaperone) and (it.user eq user) }?.id ?: "")
+        )
+    )
+}
+
 suspend fun PipelineContext<Unit, ApplicationCall>.submitReservationHandler(unused: Unit){
     val token = call.parameters["token"]
 
