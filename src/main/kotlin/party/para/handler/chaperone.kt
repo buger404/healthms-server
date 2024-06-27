@@ -84,6 +84,7 @@ suspend fun PipelineContext<Unit, ApplicationCall>.joinChaperoneHandler(unused: 
         phone = req.phone
         reserved = 0
         praised = 0
+        finished = 0
     }
     db.chaperones.add(chaperone)
 

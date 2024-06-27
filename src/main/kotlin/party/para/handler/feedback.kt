@@ -95,8 +95,11 @@ suspend fun PipelineContext<Unit, ApplicationCall>.checkoutHandler(unused: Unit)
     db.feedbacks.add(feedback)
 
     val chaperoneObj = db.chaperones.firstOrNull { it.id eq reservation.chaperone }
-    if (chaperoneObj != null && req.praise){
-        chaperoneObj.praised++
+    if (chaperoneObj != null){
+        if (req.praise){
+            chaperoneObj.praised++
+        }
+        chaperoneObj.finished++
         chaperoneObj.flushChanges()
     }
 

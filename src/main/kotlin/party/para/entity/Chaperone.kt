@@ -18,6 +18,7 @@ interface Chaperone : Entity<Chaperone> {
     var phone : String
     var reserved : Int
     var praised : Int
+    var finished : Int
 }
 
 object Chaperones : Table<Chaperone>("chaperone") {
@@ -30,6 +31,7 @@ object Chaperones : Table<Chaperone>("chaperone") {
     val phone = varchar("phone").bindTo { it.phone }
     val reserved = int("reserved").bindTo { it.reserved }
     val praised = int("praised").bindTo { it.praised }
+    val finished = int("finished").bindTo { it.finished }
 }
 
 val Database.chaperones get() = this.sequenceOf(Chaperones)
