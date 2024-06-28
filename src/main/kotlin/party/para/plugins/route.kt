@@ -31,6 +31,7 @@ fun Application.registerRoute() {
         get("/chaperone/info", PipelineContext<Unit, ApplicationCall>::getChaperoneInfoHandler)
         get("/chaperone/reserved", PipelineContext<Unit, ApplicationCall>::isReservedHandler)
         get("/chaperone/list", PipelineContext<Unit, ApplicationCall>::getChaperoneListHandler)
+        get("/chaperone/orders", PipelineContext<Unit, ApplicationCall>::getChaperoneReservationListHandler)
         post("/chaperone/join", PipelineContext<Unit, ApplicationCall>::joinChaperoneHandler)
         post("/chaperone/update", PipelineContext<Unit, ApplicationCall>::updateChaperoneHandler)
         post("/chaperone/quit", PipelineContext<Unit, ApplicationCall>::quitChaperoneHandler)

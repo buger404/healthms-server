@@ -36,6 +36,31 @@ suspend fun PipelineContext<Unit, ApplicationCall>.getReservationListHandler(unu
     call.respond(list)
 }
 
+suspend fun PipelineContext<Unit, ApplicationCall>.getChaperoneReservationListHandler(unused: Unit){
+    val token = call.parameters["token"]
+
+    if (!validateToken(call, token)){
+        return
+    }
+
+    val user = TokenStore.userMap[token] ?: ""
+    val list = db.from(Reservations)
+        .innerJoin(Users, on = Users.id eq Reservations.user)
+        .select(Reservations.columns + Users.username)
+        .where(Reservations.chaperone eq db.users.first { it.id eq user }.partTime)
+        .map { row ->
+            val reservation = Reservations.createEntity(row)
+            mapOf(
+                "id" to reservation.id,
+                "chaperone" to reservation.chaperone,
+                "price" to reservation.price,
+                "username" to row[Users.username]
+            )
+        }
+
+    call.respond(list)
+}
+
 suspend fun PipelineContext<Unit, ApplicationCall>.isReservedHandler(unused: Unit){
     val token = call.parameters["token"]
 
