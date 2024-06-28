@@ -8,6 +8,7 @@ import org.ktorm.entity.*
 import party.para.db.db
 import party.para.entity.*
 import party.para.model.*
+import java.time.LocalDateTime
 import java.util.*
 
 suspend fun PipelineContext<Unit, ApplicationCall>.getReservationListHandler(unused: Unit){
@@ -29,6 +30,7 @@ suspend fun PipelineContext<Unit, ApplicationCall>.getReservationListHandler(unu
                 "id" to reservation.id,
                 "chaperone" to reservation.chaperone,
                 "price" to reservation.price,
+                "time" to reservation.time,
                 "chaperoneInfo" to chaperone
             )
         }
@@ -54,6 +56,7 @@ suspend fun PipelineContext<Unit, ApplicationCall>.getChaperoneReservationListHa
                 "id" to reservation.id,
                 "chaperone" to reservation.chaperone,
                 "price" to reservation.price,
+                "time" to reservation.time,
                 "username" to row[Users.username]
             )
         }
@@ -118,6 +121,7 @@ suspend fun PipelineContext<Unit, ApplicationCall>.submitReservationHandler(unus
         user = userID
         chaperone = chaperoneID
         price = chaperoneObj.price
+        time = LocalDateTime.parse(call.parameters["date"])
     }
     db.reservations.add(reservation)
 

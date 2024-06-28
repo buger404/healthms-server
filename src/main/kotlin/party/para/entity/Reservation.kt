@@ -13,6 +13,7 @@ interface Reservation : Entity<Reservation> {
     var user : String
     var chaperone : String
     var price : BigDecimal
+    var time : LocalDateTime
 }
 
 object Reservations : Table<Reservation>("reservation") {
@@ -20,6 +21,7 @@ object Reservations : Table<Reservation>("reservation") {
     val user = varchar("user").bindTo { it.user }
     val chaperone = varchar("chaperone").bindTo { it.chaperone }
     val price = decimal("price").bindTo { it.price }
+    val time = datetime("time").bindTo { it.time }
 }
 
 val Database.reservations get() = this.sequenceOf(Reservations)
