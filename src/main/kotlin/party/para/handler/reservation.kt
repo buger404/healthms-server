@@ -102,6 +102,12 @@ suspend fun PipelineContext<Unit, ApplicationCall>.submitReservationHandler(unus
     }
 
     val userObj = db.users.first { it.id eq userID }
+
+    if (chaperoneObj.id == userObj.partTime){
+        call.respond(SubmitReservationResponse("failed", "您不能预约您自己。"))
+        return
+    }
+
     if (userObj.money < chaperoneObj.price){
         call.respond(SubmitReservationResponse("failed", "余额不足。"))
         return
