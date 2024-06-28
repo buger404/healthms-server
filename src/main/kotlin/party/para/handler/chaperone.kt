@@ -19,6 +19,20 @@ import party.para.handler.validateToken
 import java.math.BigDecimal
 import java.util.*
 
+suspend fun PipelineContext<Unit, ApplicationCall>.getChaperoneInfoHandler(unused: Unit){
+    val token = call.parameters["token"]
+
+    if (!validateToken(call, token)){
+        return
+    }
+
+    val chaperoneID = call.parameters["chaperone"] ?: ""
+    val result = db.chaperones.first { it.id eq chaperoneID}
+
+    call.respond(result)
+}
+
+
 suspend fun PipelineContext<Unit, ApplicationCall>.getChaperoneListHandler(unused: Unit){
     val id = call.parameters["hospital"]?.toInt() ?: -1
     val token = call.parameters["token"]
@@ -35,6 +49,16 @@ suspend fun PipelineContext<Unit, ApplicationCall>.getChaperoneListHandler(unuse
 }
 
 suspend fun checkChaperoneData(data : JoinChaperoneRequest, call : ApplicationCall) : Boolean{
+    if (data.name.isEmpty()){
+        call.respond(JoinChaperoneResponse("failed", "姓名不能为空！", null))
+        return false
+    }
+
+    if (data.phone.isEmpty()){
+        call.respond(JoinChaperoneResponse("failed", "手机号不能为空！", null))
+        return false
+    }
+
     if (!db.hospitals.any { it.id eq data.hospital }){
         call.respond(JoinChaperoneResponse("failed", "指定的医院不存在。", null))
         return false
@@ -42,6 +66,11 @@ suspend fun checkChaperoneData(data : JoinChaperoneRequest, call : ApplicationCa
 
     if (data.price < BigDecimal.ZERO){
         call.respond(JoinChaperoneResponse("failed", "设定的价格不能是负数。", null))
+        return false
+    }
+
+    if (data.startHour < 0 || data.startHour >= 24 || data.endHour < 0 || data.endHour >= 24){
+        call.respond(JoinChaperoneResponse("failed", "请填写正确的兼职时间段。", null))
         return false
     }
 
