@@ -1,5 +1,6 @@
 package party.para.plugins
 
+import com.fasterxml.jackson.databind.SerializationFeature
 import io.ktor.http.*
 import io.ktor.serialization.jackson.*
 import io.ktor.server.application.*
@@ -8,11 +9,15 @@ import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.response.*
 import party.para.serialization.jsonMapper
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 
 fun Application.registerMiddleware() {
     install(ContentNegotiation) {
         val converter = JacksonConverter(jsonMapper)
         register(ContentType.Application.Json, converter)
+        jackson {
+            registerModule(JavaTimeModule())
+        }
     }
 
     install(StatusPages) {
