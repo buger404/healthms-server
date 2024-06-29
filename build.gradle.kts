@@ -5,6 +5,7 @@ val logback_version: String by project
 plugins {
     kotlin("jvm") version "1.9.24"
     id("io.ktor.plugin") version "2.3.10"
+    id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
 group = "party.para"
@@ -53,4 +54,10 @@ dependencies {
     api("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.17.1")
 
     api(files("libraries/com.sinodbms.jdbc.jar"))
+}
+
+tasks {
+    shadowJar {
+
+    }
 }
